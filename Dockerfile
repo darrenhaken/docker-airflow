@@ -36,4 +36,4 @@ EXPOSE 8080 5555 8793
 
 USER ${AIRFLOW_USER}
 WORKDIR ${AIRFLOW_HOME}
-CMD ["./entrypoint.sh"]
+CMD airflow webserver
