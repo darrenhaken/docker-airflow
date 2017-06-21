@@ -1,0 +1,70 @@
+version: '3.0'
+
+services:
+  webserver:
+    build: .
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    ports:
+     - "8080:8080"
+    command: airflow webserver
+
+  scheduler:
+    build: .
+    restart: always
+    depends_on:
+      - webserver
+     # volumes:
+         # - ~/docker-airflow/dags:/usr/local/airflow/dags
+    environment:
+       - LOAD_EX=y
+       - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+       - EXECUTOR=Celery
+       # - POSTGRES_USER=airflow
+       # - POSTGRES_PASSWORD=airflow
+       # - POSTGRES_DB=airflow
+    command: airflow scheduler
+
+  worker:
+    build: .
+    restart: always
+    depends_on:
+       - scheduler
+    # volumes:
+       # - ~/docker-airflow/dags:/usr/local/airflow/dags
+    environment:
+       - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+       - EXECUTOR=Celery
+       # - POSTGRES_USER=airflow
+       # - POSTGRES_PASSWORD=airflow
+       # - POSTGRES_DB=airflow
+    command: airflow worker
+
+  flower:
+    build: .
+    restart: always
+    depends_on:
+      - redis
+      - scheduler
+    environment:
+      - EXECUTOR=Celery
+    ports:
+      - "5555:5555"
+    command: airflow flower
+
+  redis:
+    image: 'redis:3.2.9'
+
+  postgres:
+    image: postgres:9.6
+    volumes:
+      - postgresData:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+
+volumes:
+    postgresData:
