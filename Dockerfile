@@ -29,11 +29,14 @@ COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
 # Copy startup script
 RUN chown -R ${AIRFLOW_USER}: ${AIRFLOW_HOME}
-#RUN chown -R ${AIRFLOW_USER}: ${AIRFLOW_HOME}/entrypoint.sh
-#RUN chmod +x ${AIRFLOW_HOME}/entrypoint.sh
 
 EXPOSE 8080 5555 8793
 
 USER ${AIRFLOW_USER}
-WORKDIR ${AIRFLOW_HOME}
-CMD airflow webserver
+WORKDIR $AIRFLOW_HOME
+
+# This is used to wait for
+ENTRYPOINT ["./entrypoint.sh"]
+
+# This is the default command and it overridden in the docker-compose.yml
+CMD ["webserver"]

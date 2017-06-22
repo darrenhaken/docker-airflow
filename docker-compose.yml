@@ -9,12 +9,7 @@ services:
       - redis
     ports:
      - "8080:8080"
-    command:
-          - /bin/sh
-          - -c
-          - |
-              airflow initdb
-              airflow webserver
+    command: webserver
 
   scheduler:
     build: .
@@ -24,13 +19,11 @@ services:
      # volumes:
          # - ~/docker-airflow/dags:/usr/local/airflow/dags
     environment:
-       - LOAD_EX=y
        - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-       - EXECUTOR=Celery
-       # - POSTGRES_USER=airflow
-       # - POSTGRES_PASSWORD=airflow
-       # - POSTGRES_DB=airflow
-    command: airflow scheduler
+       - POSTGRES_USER=airflow
+       - POSTGRES_PASSWORD=airflow
+       - POSTGRES_DB=airflow
+    command: scheduler
 
   worker:
     build: .
@@ -40,12 +33,10 @@ services:
     # volumes:
        # - ~/docker-airflow/dags:/usr/local/airflow/dags
     environment:
-       - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-       - EXECUTOR=Celery
-       # - POSTGRES_USER=airflow
-       # - POSTGRES_PASSWORD=airflow
-       # - POSTGRES_DB=airflow
-    command: airflow worker
+       - POSTGRES_USER=airflow
+       - POSTGRES_PASSWORD=airflow
+       - POSTGRES_DB=airflow
+    command: worker
 
   flower:
     build: .
@@ -57,7 +48,7 @@ services:
       - EXECUTOR=Celery
     ports:
       - "5555:5555"
-    command: airflow flower
+    command: flower
 
   redis:
     image: 'redis:3.2.9'
