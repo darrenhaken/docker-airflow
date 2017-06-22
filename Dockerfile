@@ -23,6 +23,13 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    net-tools \
+    netcat \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
 # Copy startup script
 COPY script/entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg

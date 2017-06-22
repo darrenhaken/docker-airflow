@@ -4,14 +4,9 @@ services:
   webserver:
     build: .
     restart: always
-    links:
-      - postgres:postgres
-      - redis:redis
-      - worker:worker
-      - scheduler:scheduler
-    # depends_on:
-    #   - postgres
-    #   - redis
+    depends_on:
+      - postgres
+      - redis
     ports:
      - "8080:8080"
     command: webserver
@@ -19,11 +14,8 @@ services:
   scheduler:
     build: .
     restart: always
-    links:
-      - postgres:postgres
-      - redis:redis
-    # depends_on:
-      # - webserver
+    depends_on:
+      - webserver
      # volumes:
          # - ~/docker-airflow/dags:/usr/local/airflow/dags
     environment:
@@ -36,11 +28,8 @@ services:
   worker:
     build: .
     restart: always
-    links:
-      - postgres:postgres
-      - redis:redis
-    # depends_on:
-      #  - scheduler
+    depends_on:
+       - scheduler
     # volumes:
        # - ~/docker-airflow/dags:/usr/local/airflow/dags
     environment:
@@ -52,11 +41,9 @@ services:
   flower:
     build: .
     restart: always
-    links:
-      - redis:redis
-    # depends_on:
-    #   - redis
-    #   - scheduler
+    depends_on:
+      - redis
+      - scheduler
     environment:
       - EXECUTOR=Celery
     ports:
@@ -65,17 +52,14 @@ services:
 
   redis:
     image: 'redis:3.2.9'
-    ports:
-      - "6379:6379"
+
   postgres:
     image: postgres:9.6
-    ports:
-      - "5432:5432"
     volumes:
       - postgresData:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=airflow
       - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
       - POSTGRES_DB=airflow
 
 volumes:
