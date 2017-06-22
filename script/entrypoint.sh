@@ -13,6 +13,7 @@ TRY_LOOP=10
 : ${POSTGRES_DB:="airflow"}
 
 function waitForRedis {
+    echo "INFO - Beginning to wait for Redis"
     if [ $AIRFLOW_ARG = "webserver" ] || [ $AIRFLOW_ARG = "worker" ] || [ $AIRFLOW_ARG = "scheduler" ] || [ $AIRFLOW_ARG = "flower" ] ; then
         count=0
         while ! nc -z $REDIS_HOST $REDIS_PORT >/dev/null 2>&1 < /dev/null; do
@@ -24,10 +25,12 @@ function waitForRedis {
             sleep 5
             (( count++ ))
         done
+        echo "INFO - Redis is now available"
     fi
 }
 
 function waitForPostgres {
+    echo "INFO - Beginning to wait for Postgres"
     if [ $AIRFLOW_ARG = "webserver" ] || [ $AIRFLOW_ARG = "worker" ] || [ $AIRFLOW_ARG = "scheduler" ] ; then
         count=0
         while ! nc -z $POSTGRES_HOST $POSTGRES_PORT >/dev/null 2>&1 < /dev/null; do
@@ -39,6 +42,7 @@ function waitForPostgres {
             sleep 5
             (( count++ ))
         done
+        echo "INFO - Postgres is now available"
     fi
 }
 
