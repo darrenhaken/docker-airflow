@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 AIRFLOW_COMMAND="airflow"
 AIRFLOW_ARG="$*"
 TRY_LOOP=10

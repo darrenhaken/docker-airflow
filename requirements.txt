@@ -1,6 +1,11 @@
-airflow[celery,postgres]
+airflow[crypto,celery,postgres,jdbc]
 # airflow[crypto,celery,postgres,hive,hdfs,jdbc]
 celery[redis]==3.1.17
+Cython
+pytz
+pyOpenSSL
+ndg-httpsclient
+pyasn1
 # sasl
 # psycopg2
 # rauth
