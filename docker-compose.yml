@@ -4,11 +4,9 @@ services:
   webserver:
     build: .
     restart: always
-    links:
+    depends_on:
       - postgres
       - redis
-      - worker
-      - scheduler
     ports:
       - "8080:8080"
     command: webserver
@@ -17,9 +15,6 @@ services:
     build: .
     restart: always
     depends_on:
-      - postgres
-      - redis
-    links:
       - postgres
       - redis
      # volumes:
@@ -36,8 +31,8 @@ services:
     restart: always
     ports:
       - "8793:8793"
-    links:
-      - postgres
+    depends_on:
+      - scheduler
       - redis
     # volumes:
        # - ~/docker-airflow/dags:/usr/local/airflow/dags
@@ -51,6 +46,8 @@ services:
   flower:
     build: .
     restart: always
+    depends_on:
+      - redis
     links:
       - redis
     ports:

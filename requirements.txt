@@ -1,6 +1,7 @@
-airflow[crypto,celery,postgres,jdbc]
+airflow[crypto,celery,postgres,jdbc]==1.8.0
+celery[redis]==4.0.2
+psycopg2
 # airflow[crypto,celery,postgres,hive,hdfs,jdbc]
-celery[redis]==3.1.17
 Cython
 pytz
 pyOpenSSL
