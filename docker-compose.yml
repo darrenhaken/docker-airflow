@@ -7,6 +7,8 @@ services:
     depends_on:
       - postgres
       - redis
+    volumes:
+      - ./dags:/usr/local/airflow/dags
     ports:
       - "8080:8080"
     command: webserver
@@ -17,13 +19,12 @@ services:
     depends_on:
       - postgres
       - redis
-     # volumes:
-         # - ~/docker-airflow/dags:/usr/local/airflow/dags
+    volumes:
+      - ./dags:/usr/local/airflow/dags
     environment:
-       - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-       - POSTGRES_USER=airflow
-       - POSTGRES_PASSWORD=airflow
-       - POSTGRES_DB=airflow
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
     command: scheduler
 
   worker:
@@ -34,8 +35,8 @@ services:
     depends_on:
       - scheduler
       - redis
-    # volumes:
-       # - ~/docker-airflow/dags:/usr/local/airflow/dags
+    volumes:
+      - ./dags:/usr/local/airflow/dags
     environment:
       - AIRFLOW_HOME=/usr/local/airflow
       - POSTGRES_USER=airflow
@@ -48,6 +49,8 @@ services:
     restart: always
     depends_on:
       - redis
+    volumes:
+      - ./dags:/usr/local/airflow/dags
     links:
       - redis
     ports:
@@ -73,3 +76,4 @@ services:
 
 volumes:
     postgresData:
+    airflow_dags:
