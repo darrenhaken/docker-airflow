@@ -1,4 +1,4 @@
-airflow[crypto,celery,postgres,jdbc]==1.8.0
+airflow[celery,crypto,devel,postgres,jdbc,s3,slack]==1.8.0
 celery[redis]==4.0.2
 psycopg2
 # airflow[crypto,celery,postgres,hive,hdfs,jdbc]

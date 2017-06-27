@@ -24,6 +24,12 @@ RUN apt-get update \
     locales \
     netcat \
     curl \
+    libpq-dev \
+    libkrb5-dev \
+    libsasl2-dev \
+    libssl-dev \
+    libffi-dev \
+    build-essential \
   # Set locale
   && sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
   && locale-gen \
